@@ -1,0 +1,55 @@
+0. To install ansible and others like ansible-playbook etc., you can look at tips_ansible elsewhere, or use setup_ansible.sh elsewhere.
+
+1. It looks ansible is very unforgiving on any indent error or ssh requirements, even for local address like 127.0.0.1 or local ifconfig derived values.
+However, I was able to run successfully playbook0.yaml without setting any ssh or without using hosts/inventory file.
+ansible-playbook  playbook0.yaml
+is successful.
+But it looks if you use ini file, even for local ip address, ssh config is required.
+
+2. Beyond this, to make the command work with ini file, I had to go through the ssh drill explained elsewhere but showing here:
+
+
+sudo systemctl status sshd
+These 3 commands were not needed as firewall daemon was already there as shown by the above status command:
+sudo dnf install openssh-server
+sudo systemctl start sshd
+sudo systemctl enable sshd
+
+Also did this:
+sudo firewall-cmd --permanent --add-service=ssh
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-all
+ssh-keygen -t rsa -b 3072
+Needed to do these 2 commands, because I had mistakenly entered y when I should have just entered nothering (just ENTER):
+mv y ~/.ssh/id_rsa
+mv y.pub ~/.ssh/id_rsa.pub
+ chmod 600 ~/.ssh/id_rsa
+chmod 644 ~/.ssh/id_rsa.pub
+
+Last crucial step:
+ssh-copy-id rranjan@127.0.0.1
+This probably creates a new file authorized_keys in the .ssh folder.
+
+After this, with ini file containig 127.0.0.1, the following command executes beautifully:
+ansible-playbook -i inventory.ini playbook.yaml
+
+The above command also works beautifully, if I replace  with 192.168.172.138 in ini file, where 192.168.172.138 is IP address of local host. There was NOT any
+need for a separate ssh-copy-id rranjan@192.168.172.138
+
+Henceforth, try to not make any change to this hello folder files, keet it in its current pristine form!!
+
+3. One more playbook test for more testing
+
+# Multiple variables
+ansible-playbook -i inventory.ini mytester.yaml -e "folder_name=my_test folder_state=directory"
+ansible-playbook -i inventory.ini mytester.yaml -e "folder_name=my_test folder_state=absent"
+
+
+# Using JSON (very useful for AI Agents)
+ansible-playbook -i inventory.ini mytester.yaml -e '{"folder_name": "my_test", "folder_state": "directory"}'
+ansible-playbook -i inventory.ini mytester.yaml -e '{"folder_name": "my_test", "folder_state": "absent"}'
+
+The 4 commands duly and thoroughly tested.
+
+
+
