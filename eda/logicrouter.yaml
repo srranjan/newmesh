@@ -1,0 +1,47 @@
+---
+- name: The Great Logic Router
+  hosts: all
+  sources:
+    - ansible.eda.webhook:
+        port: 5000
+
+  rules:
+    # (i) Case: Value is 'val1'
+    - name: Route to specialized playbook
+      condition: event.payload.status == "val1"
+      action:
+        # We use 'debug' as a separate action BEFORE the playbook run
+        run_job_template: # or run_playbook
+          name: handle_val1_logic.yml
+          # To see the trace, you actually look at the 'event' in the playbook
+          # or use the 'debug' action in EDA like this:
+        debug: 
+          msg: "DEBUG: Condition met for val1. Event payload was: {{ event.payload }}"
+
+    # (ii) Case: Value is 'val2'
+    - name: Route to External API Call
+      condition: event.payload.status == "val2"
+      action:
+        # You can bundle multiple actions! 
+        # First, print the trace...
+        debug:
+          msg: "DEBUG: Entering val2 branch. Sending to API..."
+        # Then, perform the module call...
+        run_module:
+          name: ansible.builtin.uri
+          module_args:
+            url: "https://api.yourcompany.com/v1/alert"
+            method: POST
+            body:
+              info: "EDA received val2"
+              original_event: "{{ event.payload }}"
+
+    # (iii) Case: Catch-all
+    - name: Default Fallback
+      condition: event.payload.status != "val1" and event.payload.status != "val2"
+      action:
+        debug:
+          msg: "DEBUG: No match found. Falling back to default logger."
+        run_playbook:
+          name: default_logger.yml
+

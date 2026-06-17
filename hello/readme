@@ -51,5 +51,7 @@ ansible-playbook -i inventory.ini mytester.yaml -e '{"folder_name": "my_test", "
 
 The 4 commands duly and thoroughly tested.
 
+PostScript: The mytester.yaml was also tested from AAP environment(deployed on OpenShift), making changes to the RedHat guest (at least 
+creating a new folder over there). 
 
 
