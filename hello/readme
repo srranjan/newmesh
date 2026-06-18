@@ -51,7 +51,23 @@ ansible-playbook -i inventory.ini mytester.yaml -e '{"folder_name": "my_test", "
 
 The 4 commands duly and thoroughly tested.
 
-PostScript: The mytester.yaml was also tested from AAP environment(deployed on OpenShift), making changes to the RedHat guest (at least 
+PostScript: 
+The mytester.yaml was also tested from AAP environment(deployed on OpenShift), successful in making changes to the RedHat guest (at least 
 creating a new folder over there). 
+However, I could not down the special steps for configuring on AAP GUI was not noted down succinctly, rather is contained in the word doc
+in haphazard manner. I am correcting this fault when doing for eda.
+However, for hello (this one) itself, I am trying to note down the steps that were most probably taken here:
+Running a playbook from a UI (AAP) is fundamentally different from running it on a terminal because AAP has to provide all the "context" (keys and variables) that you normally provide manually.
+(a)
+Extra Variables (folder_name and folder_state): 
+•	Option A: Static (Always the same): Paste the following into the Variables (Extra Variables) box in the Template definition:
+---
+folder_name: "my_test"
+folder_state: "directory"
+(The --- at the top is optional but tells AAP "This is a clean YAML document").
+(b) 
+Inventory Configuration for Group myHosts etc.
 
-
+(c) Credentials Twist:
+Credentials SSH key:
+There are 3 types of Credentials options - 
