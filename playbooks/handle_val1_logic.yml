@@ -1,0 +1,8 @@
+- name: Handle Val1
+  hosts: localhost
+  tasks:
+    - name: Trace Step
+      debug:
+        msg: "I have started. The event that brought me here is: {{ ansible_eda.event }}"
+        verbosity: 1
+
