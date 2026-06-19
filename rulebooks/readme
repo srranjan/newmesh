@@ -36,6 +36,7 @@ Source control URL https://github.com/srranjan/newmesh
 Rest all defautls or empty
 
 No Source control Credential (as this is a public repository)
+Probably the above new project is done wrongly, this project needes to be created under Automation Decision.(IMPORTANT) 
 Probably the above new project is done wrongly, this project needes to be created under Automation Decision. 
 For that, I created another one rajeda1
 Another thing found was that you should place your rulebooks in a subfolder rulebooks under the root folder (there is another 
@@ -50,6 +51,16 @@ I am trying this for image : registry.redhat.io/ansible-automation-platform-24/d
 
 Currently, I am not using Credentials for registry.redhat.io, but right now it is not complaining.
 
+Because I did git push and pull and merge, I did a sync for rajeda1 !!
+Create rulebook activation:
+rajrules
+Org: default
+Project rajeda1
+Now rulebook logicrouter.yaml is being recogzined (as we created a rulebooks folder in git and place it inside that!!).
+Decision environment :  rajedaenv
+
+Rest all defaults (including no Variables).
+Unexpected server error; Contact your system admin!!!
 Create rulebook activation:
 
 
