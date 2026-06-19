@@ -1,0 +1,8 @@
+- name: Handle Default
+  hosts: localhost
+  tasks:
+    - name: Trace Step
+      debug:
+        msg: "I am the Default Handler, I take what nobody wishes to take!!"
+        verbosity: 1
+
