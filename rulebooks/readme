@@ -40,7 +40,7 @@ Probably the above new project is done wrongly, this project needes to be create
 Probably the above new project is done wrongly, this project needes to be created under Automation Decision. 
 For that, I created another one rajeda1
 Another thing found was that you should place your rulebooks in a subfolder rulebooks under the root folder (there is another 
-option like  name: playbooks/default_logger.yml ).
+option like  name: extensions/eda/rulebooks ).
 Probably a best practice: Place playbooks used by rulebook in a sibling playbooks subfolder.
 
 Next stop in GUI: Automation Decsions -> Decision Environments
