@@ -4,24 +4,29 @@
   sources:
     - ansible.eda.webhook:
         port: 5000
+  inventory:
+    hosts:
+      localhost:
+        ansible_connection: local
 
   rules:
+    - name: Debug Val1
+    condition: event.payload.status == "val1"
+    action:
+      debug:
+        msg: "DEBUG: Condition met for val1
     # (i) Case: Value is 'val1'
     - name: Route to specialized playbook
       condition: event.payload.status == "val1"
       action:
-        - debug:
-            msg: "DEBUG: Condition met for val1. Event payload was: {{ event.payload }}"
-        - run_playbook:
-            name: playbooks/handle_val1_logic.yml
+        run_playbook:
+            name: playbooks/handle_val1_logic1.yml
 
     # (ii) Case: Value is 'val2'
     - name: Route to External API Call
       condition: event.payload.status == "val2"
       action:
-        - debug:
-            msg: "DEBUG: Entering val2 branch. Sending to API..."
-        - run_module:
+        run_module:
             name: ansible.builtin.uri
             module_args:
               url: "https://api.yourcompany.com/v1/alert"
@@ -34,8 +39,6 @@
     - name: Default Fallback
       condition: event.payload.status != "val1" and event.payload.status != "val2"
       action:
-        - debug:
-            msg: "DEBUG: No match found. Falling back to default logger."
-        - run_playbook:
-            name: playbooks/default_logger.yml
+         run_playbook:
+            name: playbooks/default_logger1.yml
 
