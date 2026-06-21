@@ -1,0 +1,16 @@
+•	GUI/API Errors: oc logs -f deployment/rranjan-lab-eda-api -c eda-api -n ansible-automation-platform (Note: This was useful to detect Python parsing error).
+
+•	Rulebook Execution Errors: oc logs -f deployment/rranjan-lab-eda-activation-worker -n ansible-automation-platform
+•	
+•	Project Import Errors: oc logs -f deployment/rranjan-lab-eda-default-worker -n ansible-automation-platform
+
+To see container names in pods:
+oc describe pod rranjan-lab-gateway-548965c7c9-xxc8j -n ansible-automation-platform
+api, proxy
+To see logs in a container in a pod:
+oc logs deploy/rranjan-lab-gateway  -c api -n ansible-automation-platform
+oc logs deploy/rranjan-lab-gateway  -c proxy -n ansible-automation-platform
+
+
+
+

@@ -63,6 +63,9 @@ Rest all defaults (including no Variables).
 Unexpected server error; Contact your system admin!!!
 Create rulebook activation:
 
+A small note: From logicrouter.yaml to logicrouter1.yaml, only a small change - transferring the inventory reference from playbooks to rulebooks. 
+
+
 
 
 
