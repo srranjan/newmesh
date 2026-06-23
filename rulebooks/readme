@@ -130,6 +130,12 @@ I could see this one running continuously consistent with the following observat
 Pending -> Starting -> Running
 One more test after some change in yml file.
 
+Finally, finally, I did get "System is working with a Vengeance!!!" in the AAP GUI console, for the Running "NotSimple" rulebook correspoding to file test_simple1.yml and for the curl mentioned above. It looks an additional entry in /etc/hosts file of eda-webhook-route-ansible-automation-platform.apps-crc.testing is added by the whole process. Also eda-route1.yml stands validated.
+
+This test was important, as it ties the AAP configuration and OpenShift configuration.
+If AAP installed in OpenShift cause any more problem, we might shift to standalone AAP for more work. I wished the eda-route1.yml to be validated if I need to abandon OpenShift deploy of AAP. That was achieved.
+
+
 
 
 

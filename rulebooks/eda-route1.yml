@@ -18,3 +18,4 @@ spec:
 # oc apply -f eda-route1.yml
 # oc get route eda-webhook-route -n ansible-automation-platform
 # USe the output in your curl or in your webhook configuration
+#This is a fully validated configuration tested through curl. An entry was added, it looks, in /etc/hosts for eda-webhook-route-ansible-automation-platform.apps-crc.testing
