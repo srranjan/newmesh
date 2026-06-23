@@ -1,0 +1,13 @@
+---
+- name: Simple HelloNew
+  hosts: all
+  sources:
+    - ansible.eda.webhook:
+        port: 5000
+  rules:
+    - name: Say Hello
+      condition: event.i == 1
+      action:
+        debug:
+          msg: "System is working with a Vengeance!!!"
+
