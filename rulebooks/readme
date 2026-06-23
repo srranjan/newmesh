@@ -97,14 +97,24 @@ History > Details will show you the "Console" view with Hello World  Message "Sy
 This portion was successful in both phase 1 and 2.
 
 Now, let us work on the slightly modified test_simple1.yml which sought to be triggered by webhook (or curl, at least).
+Sync the project as there are git changes! Of course, the Project under Automation Decisions - rajeda1.
 Follow the same step as above for rulebook activation.
+NonSimple with test_simple1.yml
+This time, for a change, also adding the optional service name as mysvc
+Pending -> Starting -> Running
 Then we do the following :
 oc get svc -n ansible-automation-platform | grep activation 
-Inject the output in 
+Inject the output in eda-route1.yml
 
 oc apply -f eda-route1.yml
+oc apply -f /home/rranjan/workarea/newmesh/rulebooks/eda-route1.yml
 Get the Routes external URL:
 oc get route eda-webhook-route -n ansible-automation-platform
+Output: 
+NAME                HOST/PORT                                                        PATH   SERVICES   PORT   TERMINATION     WILDCARD
+eda-webhook-route   eda-webhook-route-ansible-automation-platform.apps-crc.testing          mysvc      5000   edge/Redirect   None
+
+
 Use it in curl, something like
 curl -H "Content-Type: application/json" \
      -X POST \
@@ -114,6 +124,11 @@ curl -H "Content-Type: application/json" \
 or, may be
 curl ... https://eda-webhook-route-ansible-automation-platform.apps-crc.testing/
 
+The first one with /endpoint seems to be the correct one. It looks curl was successful, but I could not find the message in the rulebook of 
+"System is working with a Vengeance!!!"
+I could see this one running continuously consistent with the following observation earlier, but not the tell tale sign of curl hitting it!!
+Pending -> Starting -> Running
+One more test after some change in yml file.
 
 
 

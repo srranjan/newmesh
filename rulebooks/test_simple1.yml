@@ -6,7 +6,7 @@
         port: 5000
   rules:
     - name: Say Hello
-      condition: event.i == 1
+      condition: event.payload.i == 1  # ← Changed from event.i
       action:
         debug:
           msg: "System is working with a Vengeance!!!"

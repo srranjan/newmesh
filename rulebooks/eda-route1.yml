@@ -7,7 +7,7 @@ spec:
   to:
     kind: Service
     # Output from oc get svc -n ansible-automation-platform | grep activation used below
-    name: <<activation-6-eda-logic-router>>  # ← Use the actual Service name from Step 1
+    name: mysvc  # ← Use the actual Service name from Step 1 (I had put optional service name during rulebook activation)
     weight: 100
   port:
     targetPort: 5000
