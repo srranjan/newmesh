@@ -21,7 +21,14 @@ This admin password will help you login to AAP dashboard.
 
 oc get routes -n ansible-automation-platform for getting AAP dashboard URL.
  I get rranjan-lab-ansible-automation-platform.apps-crc.testing 
+Begin PostScript Phase 2
+I try to fill my Redhat Username and password for activate Subscription (with 60 day Product trial ....) as subscription
+Did not chose anything for Optional: Automation analytics
+Checked end user licences agreement
+Review
+End PostScript Phase 2
 
+Begin PostScript Phase 2 Wrong steps, project needed under Automation Decision
 After login to AAP gui:
 Project rajeda created.
 
@@ -38,7 +45,11 @@ Rest all defautls or empty
 No Source control Credential (as this is a public repository)
 Probably the above new project is done wrongly, this project needes to be created under Automation Decision.(IMPORTANT) 
 Probably the above new project is done wrongly, this project needes to be created under Automation Decision. 
+End PostScript Phase 2 Wrong steps, project needed under Automation Decision
+
 For that, I created another one rajeda1
+For this project, Org Default, Source Control url is https://github.com/srranjan/newmesh/ (rest all defaults, no
+secret as it is a public repos)
 Another thing found was that you should place your rulebooks in a subfolder rulebooks under the root folder (there is another 
 option like  name: extensions/eda/rulebooks ).
 Probably a best practice: Place playbooks used by rulebook in a sibling playbooks subfolder.
@@ -56,16 +67,52 @@ Create rulebook activation:
 rajrules
 Org: default
 Project rajeda1
+Begin PostScript Phase 2 Hold your horses for logicrouter.yaml or logicrouter1.yaml. First test for simpler stuff
 Now rulebook logicrouter.yaml is being recogzined (as we created a rulebooks folder in git and place it inside that!!).
+End PostScript Phase 2 Hold your horses for logicrouter.yaml or logicrouter1.yaml. First test for simpler stuff
 Decision environment :  rajedaenv
 
+Begin PostScript Phase 2 Hold your horses for logicrouter.yaml or logicrouter1.yaml. First test for simpler stuff
 Rest all defaults (including no Variables).
 Unexpected server error; Contact your system admin!!!
 Create rulebook activation:
 
 A small note: From logicrouter.yaml to logicrouter1.yaml, only a small change - transferring the inventory reference from playbooks to rulebooks. 
 
+End PostScript Phase 2 Hold your horses for logicrouter.yaml or logicrouter1.yaml. First test for simpler stuff
 
+Phase 2 (no phase 1 after this)
+Create rulebook activation:
+SimpleHello with test_simple.yml
+Org Default
+Project rajeda1
+Rulebook test_simple.yml
+Decision env rajedaenv
+Rest all default (including no variables)
+Rulebook Activation Enables 
+
+SimpleHello Activation apparently successful.
+Status is showing "Starting" 
+History > Details will show you the "Console" view with Hello World  Message "System is Working".
+This portion was successful in both phase 1 and 2.
+
+Now, let us work on the slightly modified test_simple1.yml which sought to be triggered by webhook (or curl, at least).
+Follow the same step as above for rulebook activation.
+Then we do the following :
+oc get svc -n ansible-automation-platform | grep activation 
+Inject the output in 
+
+oc apply -f eda-route1.yml
+Get the Routes external URL:
+oc get route eda-webhook-route -n ansible-automation-platform
+Use it in curl, something like
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -k \
+     -d '{"i": 1, "message": "Testing webhook"}' \
+     https://eda-webhook-route-ansible-automation-platform.apps-crc.testing/endpoint
+or, may be
+curl ... https://eda-webhook-route-ansible-automation-platform.apps-crc.testing/
 
 
 
