@@ -71,3 +71,8 @@ Inventory Configuration for Group myHosts etc.
 (c) Credentials Twist:
 Credentials SSH key:
 There are 3 types of Credentials options - 
+Don't use password (if you do try password, try the Red hat password, don't copy the key value there, it will not work).
+The right way is to "You upload/paste the id_rsa into the SSH Private Key field."
+
+If ever the content in this file is not sufficient to configure playbooks, inventory etc, there is a clumsy word file jottings_aap1 where
+you may go, and instead of wading through a lot of junk, try to do a search for "BEGIN COPYPASTE" and "IMPORTANT" etc. Of course, going to the horse's mouth is the last resort, the most clumsy resort probably! 
