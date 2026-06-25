@@ -135,7 +135,31 @@ Finally, finally, I did get "System is working with a Vengeance!!!" in the AAP G
 This test was important, as it ties the AAP configuration and OpenShift configuration.
 If AAP installed in OpenShift cause any more problem, we might shift to standalone AAP for more work. I wished the eda-route1.yml to be validated if I need to abandon OpenShift deploy of AAP. That was achieved.
 
+Phase 3: Rulebook with conditions
+
+{
+A digression for my server
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"info": "EDA received val2", "original_event": {"status": "val2", "test": true}}' \
+     http://192.168.172.138:8080/v1/alert
+
+This one and the python listener tested, at least.
+}
+logicrouter.yaml Testing.
 
 
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"status": "val1", "message": "Triggering the specialized playbook flow"}' \
+     http://<YOUR_AAP_IP>:5000/endpoint
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"status": "val2", "message": "Forwarding this to the external API"}' \
+     http://<YOUR_AAP_IP>:5000/endpoint
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"status": "something_else", "message": "I am an unknown status"}' \
+     http://<YOUR_AAP_IP>:5000/endpoint
 
 
