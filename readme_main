@@ -1,0 +1,62 @@
+
+
+Prelude:
+
+oc get routes -n ansible-automation-platform for getting AAP dashboard URL.
+ I get rranjan-lab-ansible-automation-platform.apps-crc.testing
+
+oc get secret rranjan-lab-admin-password -n ansible-automation-platform -o jsonpath='{.data.password}' | base64 -d; echo
+
+Step 1:
+
+hello/mytester.yaml all over again 
+In Automation Execution:
+New project: rajjobs
+Org Default 
+SCM Type git 
+Source Control URL https://github.com/srranjan/newmesh/
+As it is a public repos, credentials not needed for this.
+Also Did not select content Signature Validation
+Default Execution Environment
+
+Create a rajinventory with Default project etc.
+
+Within this rajinventory, created a group myhosts.
+Within this myhosts, creating host of 192.168.172.138 (only 1 for now, later may add more)
+
+Now, let us go to Automation Execution -> Infrastructure -> Credentials to create a credential:
+Please note, many of the menu items are under both Automation Execution and Automation Decision, and you need to be careful
+under which hierarchy you are adding your things. E.g., in all the above inventory, group hosts and hosts etc., our 
+context is Automation Execution and NOT Automation decision (which probably will come into play for rulebooks etc.). Be careful!
+rajcred
+Org Default
+Creditential type: Machine
+And here is the real thing for credentials, of the 3 alternatives - Username, SSH Priate Key and Signed SSH Cert,
+we shall use the second one and upload the private rsa key (though probably the Username with Linux password might also 
+work, but we shall not take the chance, as we had already gone through the hassle of ssh configuration)
+In our case private passphrase etc. is not relevant.
+
+Next, let us try to create a template.
+Create job template 
+rajjobtmpl
+job type Run
+Project Default
+Inventory rajinventory
+Project rajjobs
+Execution environment Default execution environment 
+Playbook      hello/mytester.yaml
+Credentials: rajcred|Machine
+Extra Variables:
+---
+folder_name: "my_test"
+folder_state: "directory"
+
+I create with my above explicit values, though there are so many other which I don't use (and keep defaults, where 
+applicable).
+
+Moment of truth: Testing time. Launch rajjobtmpl
+Initially, it failed, a very small mistake - where I set the rajcred with private key upload, though I am not using 
+password, the Unix username for the RedHat host still needs to be added.
+So, I did that, and it was successful, the whole thing validated, a brand new folder my_test is created in the home 
+folder ~.
+
