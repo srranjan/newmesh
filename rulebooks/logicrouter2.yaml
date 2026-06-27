@@ -11,7 +11,7 @@
       condition: event.payload.status == "val1"
       action:
         run_playbook:
-            name: playbooks/handle_val1_logic.yml
+            name: playbooks/handle_val1_logic1.yml
 
     # (ii) Case: Value is 'val2'
     - name: Route to External API Call
@@ -26,5 +26,5 @@
       condition: event.payload.status != "val1" and event.payload.status != "val2"
       action:
          run_playbook:
-            name: playbooks/default_logger.yml
+            name: playbooks/default_logger1.yml
 
