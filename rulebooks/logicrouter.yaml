@@ -16,9 +16,11 @@
     - name: Route to specialized playbook
       condition: event.payload.status == "val1"
       action:
-        run_playbook:
-            name: playbooks/handle_val1_logic.yml
-
+      #  run_playbook:   #This form fails with inventory missing error, unfortunately.
+      #      name: playbooks/handle_val1_logic.yml
+        run_job_template:
+            name: handle_val1
+            organization: "Default"
     # (ii) Case: Value is 'val2'
     - name: Route to External API Call
       condition: event.payload.status == "val2"
@@ -36,6 +38,9 @@
     - name: Default Fallback
       condition: event.payload.status != "val1" and event.payload.status != "val2"
       action:
-         run_playbook:
-            name: playbooks/default_logger.yml
+         #run_playbook:   #This form fails with inventory missing error, unfortunately.
+         #   name: playbooks/default_logger.yml
+        run_job_template:
+            name: handle_default
+            organization: "Default"
 
