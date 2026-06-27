@@ -1,3 +1,8 @@
+PostScript: Treat this file almost as trash, the real thing has been well documented in succinct way in the 
+daddy folder in readme_main file. One thing that still remains in the file of some important is the
+ssh drill, in case you need that. I have not copied that to the readme_main. So, treat it like trash 
+but don't delete it (IMPORTANT), sometimes it might yield some forgotten clue.
+
 0. To install ansible and others like ansible-playbook etc., you can look at tips_ansible elsewhere, or use setup_ansible.sh elsewhere.
 
 1. It looks ansible is very unforgiving on any indent error or ssh requirements, even for local address like 127.0.0.1 or local ifconfig derived values.
@@ -10,7 +15,7 @@ But it looks if you use ini file, even for local ip address, ssh config is requi
 
 
 sudo systemctl status sshd
-These 3 commands were not needed as firewall daemon was already there as shown by the above status command:
+These 3 commands below were not needed as firewall daemon was already there as shown by the above status command:
 sudo dnf install openssh-server
 sudo systemctl start sshd
 sudo systemctl enable sshd
