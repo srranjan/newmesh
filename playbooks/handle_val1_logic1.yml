@@ -1,5 +1,13 @@
 - name: Handle Val1
   hosts: localhost
+  gather_facts: false
+  connection: local
+  inventory:
+    hosts:
+      localhost:
+        ansible_connection: local
+  vars:
+    ansible_connection: local
   tasks:
     - name: Trace Step
       debug:
