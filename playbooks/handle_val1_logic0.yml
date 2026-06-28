@@ -1,0 +1,11 @@
+---
+- name: Manage a test directory
+  hosts: myhosts
+  vars:
+    folder_state: directory  # Default is to create
+  tasks:
+    - name: Set the directory state
+      ansible.builtin.file:
+        path: "~/{{ folder_name }}"
+        state: "{{ folder_state }}"
+

@@ -70,7 +70,27 @@ templates for the 2 trivial playbooks used by the rulebook logicrouter.yaml
 handle_val1
 For the inventory, let us use Demo Inventory, as it used localhost and all we need for this is localhost.
 
-Create job template 
+Create job templates
+handle_val1 and handle_default
+job type Run
+Inventory Demo Inventory
+Project rajjobs
+Execution environment Default execution environment 
+Playbook      playbooks/handle_val1_logic.yml and playbooks/default_logger.yml (respectively)
+Credentials:   Not required most probably
+Extra Variables: Not required
+
+
+handle_val1 
+job type Run
+Inventory rajinventory
+Project rajjobs
+Execution environment Default execution environment 
+Playbook      playbooks/handle_val1_logic0.yml 
+Credentials:   rajcred | Machine
+Extra Variables: Not required
+
+
 handle_val1 and handle_default
 job type Run
 Inventory Demo Inventory
