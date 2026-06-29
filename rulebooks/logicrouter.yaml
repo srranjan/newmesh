@@ -19,15 +19,11 @@
     - name: Route to External API Call
       condition: event.payload.status == "val2"
       action:
-        run_module:
-            name: ansible.builtin.uri
-            module_args:
-              url: "https://192.168.172.138/v1/alert"
-              method: POST
-              body:
-                info: "EDA received val2"
-                original_event: "{{ event.payload }}"
-              body_format: json  # ← Important: tells uri module to serialize as JSON
+        run_job_template:
+            name: handle_api_call 
+            organization: "Default"
+            job_args:
+              event_payload: "{{ event.payload }}"
     # (iii) Case: Catch-all
     - name: Default Fallback
       condition: event.payload.status != "val1" and event.payload.status != "val2"

@@ -1,0 +1,13 @@
+---
+- name: Call External API
+  hosts: myhosts  # Use your inventory group
+  tasks:
+    - name: Call API
+      ansible.builtin.uri:
+        url: "https://192.168.172.138/v1/alert"
+        method: POST
+        body:
+          info: "EDA received val2"
+          original_event: "{{ event.payload }}"
+        body_format: json
+
