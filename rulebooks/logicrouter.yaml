@@ -5,12 +5,6 @@
     - ansible.eda.webhook:
         port: 5000
 
-  # Add this inventory section
-  inventory:
-    hosts:
-      localhost:
-        ansible_connection: local
-
   rules:
     # (i) Case: Value is 'val1'
     - name: Route to specialized playbook

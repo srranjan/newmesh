@@ -80,7 +80,7 @@ Playbook      playbooks/handle_val1_logic.yml and playbooks/default_logger.yml (
 Credentials:   Not required most probably
 Extra Variables: Not required
 
-
+Templates handle_val1 and handle_default defined for logicrouter.yaml:
 handle_val1 
 job type Run
 Inventory rajinventory
@@ -88,14 +88,143 @@ Project rajjobs
 Execution environment Default execution environment 
 Playbook      playbooks/handle_val1_logic0.yml 
 Credentials:   rajcred | Machine
-Extra Variables: Not required
+Extra Variables:
+---
+folder_name: "my_test"
+folder_state: "directory"
+ 
 
 
-handle_val1 and handle_default
+handle_default
 job type Run
 Inventory Demo Inventory
 Project rajjobs
 Execution environment Default execution environment 
-Playbook      playbooks/handle_val1_logic.yml and playbooks/default_logger.yml (respectively)
-Credentials:   Not required most probably
+Playbook      playbooks/default_logger0.yml
+Credentials:  Not Required 
 Extra Variables: Not required
+
+Now, we need to find the ip address and port to call the logicrouter, which we need to repeat that had 
+been done earlier in rulebooks folder readme
+
+Now moving to Automation Decsions -> Decision Environments
+
+Begin Done earlier 
+rajeda1
+For this project, Org Default, Source Control url is https://github.com/srranjan/newmesh/ (rest all defaults, no
+secret as it is a public repos)
+Another thing found was that you should place your rulebooks in a subfolder rulebooks under the root folder (there is another
+option like  name: extensions/eda/rulebooks ).
+Probably a best practice: Place playbooks used by rulebook in a sibling playbooks subfolder.
+
+Next stop in GUI: Automation Decsions -> Decision Environments
+
+Create decision environment
+rajedaenv
+I am trying this for image : registry.redhat.io/ansible-automation-platform-24/de-supported-rhel8:latest
+
+Currently, I am not using Credentials for registry.redhat.io, but right now it is not complaining.
+
+Because I did git push and pull and merge, I did a sync for rajeda1 !!
+End Done earlier 
+Problems after this currently!
+Create rulebook activation (a new rulebook ):
+logicrouter
+Org Default
+Project rajeda1
+Rulebook logicrouter.yaml
+Decision env rajedaenv
+Not necessary but  adding the optional service name as myroutersvc
+Found that this rulebook will require credentials even for creation, and probably the corresponding Credential type is "Red Hat Ansible Automation Platformi" With this, creating the following Credentials in the Automation Decisions ->Infrastructure -> Credentials:
+rajcrededa ( rajcrededa | Red Hat Ansible Automation Platform)
+But for creating this Credential, there are more intricacies to take care of . We have to find the controller URL, and after very 
+careful and complicated calculation inside the below braces {}, we strongly feel this is the URL to use in the Credential type
+https://rranjan-lab-ansible-automation-platform.apps-crc.testing/api/controller/
+For username, I will use admin, and for password, I shall use the output of this command 
+oc get secret rranjan-lab-admin-password -n ansible-automation-platform -o jsonpath='{.data.password}' | base64 -d; echo
+With the username/password given I think no OAuth token is needed. Also, don't verify SSL.
+
+{
+Here is the lengthy tip given in the GUI itself in the tiny question mark (you can skip the details ):
+Red Hat Ansible Automation Platform
+Red Hat Ansible Automation Platform base URL to authenticate with.
+For Event-Driven Ansible controller 2.5 with Ansible Automation Controller 2.4, use the following example: https://<<your_controller_host>>
+For Ansible Automation Controller 2.5, use the following example::
+ https://<<your_gateway_host>>/api/controller/
+
+Now, to find the right versions, I might need to wade through the output of these 2 commands:
+# Check installed operators/versions
+oc get csv -n ansible-automation-platform
+
+# Or check the AAP operator version
+oc get aap -n ansible-automation-platform -o yaml | grep -i version
+
+On the other hand, the tiny question mark in the web pages of AAP shows this:
+Ansible Automation Platform 2.6
+Automation Controller Version
+4.7.12
+Event-Driven Ansible Version
+1.2.9 
+
+Based on the all above calculations and this output
+oc get routes -n ansible-automation-platform for getting AAP dashboard URL.
+ I get rranjan-lab-ansible-automation-platform.apps-crc.testing
+
+it looks that Controller is 4.7.12 (which is > 2.5), so you follow the 2.5+ pattern.
+So looks we need this URL:
+https://rranjan-lab-ansible-automation-platform.apps-crc.testing/api/controller/
+For passwod of username admin, I will need this:
+oc get secret rranjan-lab-admin-password -n ansible-automation-platform -o jsonpath='{.data.password}' | base64 -d; echo
+
+}
+Rest all default (including no variables)
+Rulebook Activation Enabled
+
+logicrouter Activation apparently successful.
+Status is showing "Starting"
+
+oc get svc -n ansible-automation-platform | grep activation
+Inject the output in eda-route1.yml
+
+oc apply -f eda-route1.yml
+oc apply -f /home/rranjan/workarea/newmesh/rulebooks/eda-route1.yml
+Get the Routes external URL:
+oc get route eda-webhook-route -n ansible-automation-platform
+
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"status": "val1", "message": "Triggering the specialized playbook flow"}' \
+     http://<YOUR_AAP_IP>:5000/endpoint
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"status": "val2", "message": "Forwarding this to the external API"}' \
+     http://<YOUR_AAP_IP>:5000/endpoint
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"status": "something_else", "message": "I am an unknown status"}' \
+     http://<YOUR_AAP_IP>:5000/endpoint
+
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"status": "val1", "message": "Triggering the specialized playbook flow"}' \
+     http://<YOUR_AAP_IP>:5000/endpoint
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"status": "val2", "message": "Forwarding this to the external API"}' \
+     http://<YOUR_AAP_IP>:5000/endpoint
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"status": "something_else", "message": "I am an unknown status"}' \
+     http://<YOUR_AAP_IP>:5000/endpoint
+
+{
+A digression for my server
+curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"info": "EDA received val2", "original_event": {"status": "val2", "test": true}}' \
+     http://192.168.172.138:8080/v1/alert
+
+This one and the python listener tested, at least.
+}
+
+
