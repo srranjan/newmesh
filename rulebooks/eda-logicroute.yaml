@@ -1,0 +1,21 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: logic-wh-route
+  namespace: ansible-automation-platform
+spec:
+  to:
+    kind: Service
+    # Output from oc get svc -n ansible-automation-platform | grep activation used below
+    name: mysvc  # ← Use the actual Service name from Step 1 (I had put optional service name during rulebook activation)
+    weight: 100
+  port:
+    targetPort: 5000
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+#Usage
+# oc apply -f <This file name>
+# oc get route logic-wh-route -n ansible-automation-platform
+# USe the output in your curl or in your webhook configuration
+#This is a fully validated configuration tested through curl. An entry was added, it looks, in /etc/hosts for eda-webhook-route-ansible-automation-platform.apps-crc.testing
